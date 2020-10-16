@@ -11,6 +11,7 @@
 let state = "menu";
 
 let cellSize;
+let tictactoeCellSize;
 const BOARDDIMENSION = 18; // visable grid displayed on the board
 const PLAYDIMENSION = 19; // invisable grid to place pieces on
 
@@ -19,28 +20,48 @@ let centerBoardY;
 let centerPlayX;
 let centerPlayY;
 
+let centerTicTacToeBoardX;
+let centerTicTacToeBoardY;
+
 let board = [];
+let ticTacToeBoard = [];
 
 let currentMove = "black";
 let winner;
 
+let ticTacToeWinner;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  //gomoku cell size
   if (windowWidth <= windowHeight) {
     cellSize = windowWidth / 20;
   }
   else {
     cellSize = windowHeight / 20;
   }
+
+  //tic tac toe cell size
+  if (windowWidth <= windowHeight) {
+    tictactoeCellSize = windowWidth / 3;
+  }
+  else {
+    tictactoeCellSize = windowHeight / 3;
+  }
   
-  //determining the padding distance to center the grid
+  //determining the padding distance to center the grid (gomoku grid)
   centerBoardX = (windowWidth - cellSize * BOARDDIMENSION) /2;
   centerBoardY = (windowHeight - cellSize * BOARDDIMENSION) /2;
 
   // determining the padding distance is center the playing grid
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
+
+  //determining the padding distance to center the grid (tic tac toe)
+  centerTicTacToeBoardX = (windowWidth - tictactoeCellSize * 3) /2;
+  centerTicTacToeBoardY = (windowHeight - tictactoeCellSize * 3) /2;
+
 }
 
 function draw() {
@@ -57,13 +78,17 @@ function draw() {
 //menu interface - switching between the states of menu and game
 function keyPressed() {
   if (key === "s") {
-    gameSetup();
+    gomokuGameSetup();
     state = "play";
+  }
+  if (key === "t") {
+    ticTacToeGameSetup();
+    state = "TicTacToe";
   }
 }
 
 //setting up the display board and the play board for the game
-function gameSetup() {
+function gomokuGameSetup() {
   background(218, 184, 136);
   displayBoard();
   generatePlayBoard();
@@ -114,7 +139,7 @@ function restart() {
       text("Restart", width * 0.8 + width*0.15/2, height * 0.8 + height * 0.1/2);
 
       if(mouseIsPressed) {
-        gameSetup();
+        gomokuGameSetup();
       }
     }
   }
@@ -152,11 +177,15 @@ function displayMenu() {
     fill("white");
     textSize(width * 0.02);
     textAlign(CENTER, CENTER);
-    text("GOMOKU", width/2, height/3);
-    text("press 's' to start a game. The goal is to connect 5 in a row.", width/2, height/2);
+    text("Select a game", width/2, height/3);
+    text("press 's' to play Gomoku. The goal is to connect 5 in a row", width/2, height/2);
+    text("press 't' to play tic tac toe. The goal is to connect 3 in a row", width/2, height/1.75);
   }
 }
 
+
+
+//Gomoku
 //UI bar to display which turn it is: black or white
 function playerTurnBar() {
   if (state === "play" || state === "win") {
@@ -201,27 +230,46 @@ function mousePressed() {
     placeMarker(corX, corY);
     console.log(corX, corY);
   }
+  if (state === "TicTacToe") {
+    if (currentPlayer === human) {
+      let corX = floor(mouseX/cellSize - centerPlayX/cellSize); 
+      let corY = floor(mouseY/cellSize - centerPlayY/cellSize);
+      placeMarker(corX, corY);
+      console.log(corX, corY);
+    }
+  }
 }
 
 //saving information of current cell i.e. black, white, and null into the 2D-array when the mouse is pressed. This also displays the game piece.
 function placeMarker(x, y) {
-  if (board[y][x] === null) {
-    if (currentMove === "white") {
-      board[y][x] = "W";
-      fill(currentMove);
-      //drawing circle in cell accounting for padding
-      circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
-      currentMove = "black";
+  if(state === "play") {
+    if (board[y][x] === null) {
+      if (currentMove === "white") {
+        board[y][x] = "W";
+        fill(currentMove);
+        //drawing circle in cell accounting for padding
+        circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
+        currentMove = "black";
+      }
+      else {
+        board[y][x] = "B";
+        fill(currentMove);
+        //drawing circle in cell accounting for padding
+        circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
+        currentMove = "white";
+      }
     }
-    else {
-      board[y][x] = "B";
-      fill(currentMove);
-      //drawing circle in cell accounting for padding
+    return board;
+  }
+  else if (state === "TicTacToe") {
+    if (board[y][x] === null) {
+      board[y][x] = human;
+      fill (human);
       circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
-      currentMove = "white";
+      currentPlayer = ai;
+      // bestMove();
     }
   }
-  return board;
 }
 
 //Checking for 5 in a row;
@@ -264,6 +312,69 @@ function checkWin() {
           }
         }
       }
+    }
+  }
+}
+
+//
+//tic tac toe
+//
+function ticTacToeGameSetup() {
+  background(218, 184, 136);
+  displayTicTacToeBoard();
+}
+
+//Tic Tac Toe
+function displayTicTacToeBoard() {
+  background(218, 184, 136);
+  for (let x = 0; x < 3; x ++) {
+    ticTacToeBoard.push([]);
+    for (let y = 0; y < 3; y ++) {
+      stroke(0);
+      noFill();
+      square(tictactoeCellSize * x + centerTicTacToeBoardX, tictactoeCellSize * y + centerTicTacToeBoardY, tictactoeCellSize);
+      ticTacToeBoard[x].push(null);
+    }
+  }
+}
+
+let ai = "B";
+let human = "W";
+let currentPlayer = human;
+
+function ticTacToeWinCondition(a, b, c) {
+  return a === b && b === c && a !== null;
+}
+
+function ticTacToeCheckWin() {
+  if (state === "TicTacToe") {
+    let openCell = 0;
+    ticTacToeWinner = null;
+    for(let i = 0; i < ticTacToeBoard.length; i ++) {
+      ticTacToeWinCondition(ticTacToeBoard[i][0], ticTacToeBoard[i][1], ticTacToeBoard[i][2]);
+      ticTacToeWinner = ticTacToeBoard[i][0];
+    }
+    for(let i = 0; i < ticTacToeBoard.length; i ++) {
+      ticTacToeWinCondition(ticTacToeBoard[0][i], ticTacToeBoard[1][i], ticTacToeBoard[2][i]);
+      ticTacToeWinner = ticTacToeBoard[0][1];
+    }
+    if (ticTacToeWinCondition(displayTicTacToeBoard[0][0], displayTicTacToeBoard[1][1], displayTicTacToeBoard[2][2])) {
+      ticTacToeWinner = displayTicTacToeBoard[0][0];
+    }
+    if (displayTicTacToeBoard[0][2], displayTicTacToeBoard[1][1], displayTicTacToeBoard[2][0]) {
+      ticTacToeWinner = displayTicTacToeBoard[0][2];
+    }
+
+    for(let i = 0; i < ticTacToeBoard.length; i ++) {
+      for(let j = 0; j < ticTacToeBoard.length; j ++) {
+        openCell += 1;
+      }
+    }
+
+    if (ticTacToeWinner === null && openCell === 0) {
+      return "tie";
+    } else{
+      return winner;
     }
   }
 }
