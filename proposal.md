@@ -10,6 +10,7 @@ I am intending on creating an ai for tic tac toe and eventually applying that kn
 - Player vs. player mode (Gomoku)
 - Player vs. player mode (tic tac toe)
 - Player vs. computer mode - using minimax algorithm (tic tac toe)
+- Outline of how to apply the same ai logic to gomoku
 
 ## Nice to have
 
