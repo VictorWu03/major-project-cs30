@@ -5,7 +5,7 @@
 //The goal of the game is to connect 5 in a row
 
 let state = "menu";
-let turnState = "human";
+let turnState = "computer";
 
 let cellSize;
 const BOARDDIMENSION = 18; // visable grid displayed on the board
@@ -268,7 +268,7 @@ function checkWin() {
 }
 
 function evaluateBoardState() {
-  //consecutive
+  //points for consecutive pieces
   blackPoints = 0;
   whitePoints = 0;
 
@@ -283,17 +283,26 @@ function evaluateBoardState() {
               if (board[y][x] === board[y][x + 2]) {
                 if (board[y][x] === board[y][x + 3]) {
                   if (board[y][x] === board[y][x + 4]) {
-                    whitePoints += 3125;
+                    whitePoints += 15626;
                   }
                   else{
-                    whitePoints += 625;
+                    if (board[y][x + 4] === null) {
+                      whitePoints += 900;
+                    }
+                    whitePoints += 900;
                   }
                 }
                 else {
-                  whitePoints += 125;
+                  if (board[y][x + 3] === null) {
+                    whitePoints += 350;
+                  }
+                  whitePoints += 350;
                 }
               }
               else {
+                if (board[y][x + 2] === null) {
+                  whitePoints += 25;
+                }
                 whitePoints += 25;
               }
             }
@@ -307,17 +316,26 @@ function evaluateBoardState() {
               if (board[y][x] === board[y + 2][x]) {
                 if (board[y][x] === board[y + 3][x]) {
                   if (board[y][x] === board[y + 4][x]) {
-                    whitePoints += 3125;
+                    whitePoints += 15626;
                   }
                   else{
-                    whitePoints += 625;
+                    if (board[y + 4][x] === null) {
+                      whitePoints += 900;
+                    }
+                    whitePoints += 900;
                   }
                 }
                 else {
-                  whitePoints += 125;
+                  if (board[y + 3][x] === null) {
+                    whitePoints += 350;
+                  }
+                  whitePoints += 350;
                 }
               }
               else {
+                if (board[y + 2][x] === null) {
+                  whitePoints += 25;
+                }
                 whitePoints += 25;
               }
             }
@@ -331,17 +349,26 @@ function evaluateBoardState() {
               if (board[y][x] === board[y + 2][x + 2]) {
                 if (board[y][x] === board[y + 3][x + 3]) {
                   if (board[y][x] === board[y + 4][x + 4]) {
-                    whitePoints += 3125;
+                    whitePoints += 15626;
                   }
                   else{
-                    whitePoints += 625;
+                    if (board[y + 4][x + 4] === null) {
+                      whitePoints += 900;
+                    }
+                    whitePoints += 900;
                   }
                 }
                 else {
-                  whitePoints += 125;
+                  if (board[y + 3][x + 3] === null) {
+                    whitePoints += 350;
+                  }
+                  whitePoints += 350;
                 }
               }
               else {
+                if (board[y + 2][x + 2] === null) {
+                  whitePoints += 25;
+                }
                 whitePoints += 25;
               }
             }
@@ -355,17 +382,26 @@ function evaluateBoardState() {
               if (board[y][x] === board[y - 2][x + 2]) {
                 if (board[y][x] === board[y - 3][x + 3]) {
                   if (board[y][x] === board[y - 4][x + 4]) {
-                    whitePoints += 3125;
+                    whitePoints += 15626;
                   }
                   else{
-                    whitePoints += 625;
+                    if (board[y - 4][x + 4] === null) {
+                      whitePoints += 900;
+                    }
+                    whitePoints += 900;
                   }
                 }
                 else {
-                  whitePoints += 125;
+                  if (board[y - 3][x + 3] === null) {
+                    whitePoints += 350;
+                  }
+                  whitePoints += 350;
                 }
               }
               else {
+                if (board[y - 2][x + 2] === null) {
+                  whitePoints += 25;
+                }
                 whitePoints += 25;
               }
             }
@@ -400,7 +436,6 @@ function evaluateBoardState() {
       }
     }
 
-
     for(let x = 0; x < board.length; x ++) {
       for (let y = 0; y < board.length; y ++) {
         if (board[y][x] === "B") {
@@ -410,17 +445,26 @@ function evaluateBoardState() {
               if (board[y][x] === board[y][x + 2]) {
                 if (board[y][x] === board[y][x + 3]) {
                   if (board[y][x] === board[y][x + 4]) {
-                    blackPoints -= 3125;
+                    blackPoints -= 15626;
                   }
                   else{
-                    blackPoints -= 625;
+                    if (board[y][x + 4] === null) {
+                      whitePoints -= 900;
+                    }
+                    blackPoints -= 900;
                   }
                 }
                 else {
-                  blackPoints -= 125;
+                  if (board[y][x + 3] === null) {
+                    whitePoints -= 350;
+                  }
+                  blackPoints -= 350;
                 }
               }
               else {
+                if (board[y][x + 2] === null) {
+                  whitePoints -= 25;
+                }
                 blackPoints -= 25;
               }
             }
@@ -434,17 +478,26 @@ function evaluateBoardState() {
               if (board[y][x] === board[y + 2][x]) {
                 if (board[y][x] === board[y + 3][x]) {
                   if (board[y][x] === board[y + 4][x]) {
-                    blackPoints -= 3125;
+                    blackPoints -= 15626;
                   }
                   else{
-                    blackPoints -= 625;
+                    if (board[y + 4][x] === null) {
+                      whitePoints -= 900;
+                    }
+                    blackPoints -= 900;
                   }
                 }
                 else {
-                  blackPoints -= 125;
+                  if (board[y + 3][x] === null) {
+                    whitePoints -= 350;
+                  }
+                  blackPoints -= 350;
                 }
               }
               else {
+                if (board[y + 2][x] === null) {
+                  whitePoints -= 25;
+                }
                 blackPoints -= 25;
               }
             }
@@ -458,17 +511,26 @@ function evaluateBoardState() {
               if (board[y][x] === board[y + 2][x + 2]) {
                 if (board[y][x] === board[y + 3][x + 3]) {
                   if (board[y][x] === board[y + 4][x + 4]) {
-                    blackPoints -= 3125;
+                    blackPoints -= 15626;
                   }
                   else{
-                    blackPoints -= 625;
+                    if (board[y + 4][x + 4] === null) {
+                      whitePoints -= 900;
+                    }
+                    blackPoints -= 900;
                   }
                 }
                 else {
-                  blackPoints -= 125;
+                  if (board[y + 3][x + 3] === null) {
+                    whitePoints -= 350;
+                  }
+                  blackPoints -= 350;
                 }
               }
               else {
+                if (board[y + 2][x + 2] === null) {
+                  whitePoints -= 25;
+                }
                 blackPoints -= 25;
               }
             }
@@ -482,17 +544,26 @@ function evaluateBoardState() {
               if (board[y][x] === board[y - 2][x + 2]) {
                 if (board[y][x] === board[y - 3][x + 3]) {
                   if (board[y][x] === board[y - 4][x + 4]) {
-                    blackPoints -= 3125;
+                    blackPoints -= 15626;
                   }
                   else{
-                    blackPoints -= 625;
+                    if (board[y - 4][x + 4] === null) {
+                      whitePoints -= 900;
+                    }
+                    blackPoints -= 900;
                   }
                 }
                 else {
-                  blackPoints -= 125;
+                  if (board[y - 3][x + 3] === null) {
+                    whitePoints -= 350;
+                  }
+                  blackPoints -= 350;
                 }
               }
               else {
+                if (board[y - 2][x + 2] === null) {
+                  whitePoints -= 25;
+                }
                 blackPoints -= 25;
               }
             }
@@ -525,12 +596,18 @@ function evaluateBoardState() {
         }
       }
     }
-    score = whitePoints + blackPoints;
-    console.log(whitePoints);
-    console.log(blackPoints);
-    console.log(score);
-    return score;
+    
   }
+  // if (currentMove === "black") {
+  //   blackPoints = blackPoints * 0.2;
+  //   whitePoints = whitePoints * 1.2;
+  // }
+  // else if(currentMove === "white") {
+  //   whitePoints = whitePoints * 0.2;
+  //   blackPoints = blackPoints * 1.2;
+  // }
+  score = whitePoints + blackPoints;
+  return score;
 }
 
 function bestMove() {
