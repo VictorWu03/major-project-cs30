@@ -8,11 +8,11 @@ I am intending on creating an ai for tic tac toe and eventually applying that kn
 
 - Win detection i.e. horozontal, vertical, and diagonal
 - Player vs. player mode (Gomoku)
-- Player vs. player mode (tic tac toe)
-- Player vs. computer mode - using minimax algorithm (tic tac toe)
-- Outline of how to apply the same ai logic to gomoku
+- Option for player to select between playing against another human or playing against the computer
+- Basic AI for Gomoku - have the computer alternate moves with the player 
 
 ## Nice to have
 
-- Player vs. vomputer mode - using minimax/generating score based on board state (gomoku)
+- Player vs. computer mode - using minimax/generating score based on board state (gomoku)
+- Improving computer decisions using recursion and increasing the search depth to generate "smarter" moves
 - Imporved interface features

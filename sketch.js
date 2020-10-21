@@ -6,6 +6,7 @@
 
 let state = "menu";
 let turnState = "computer";
+let mode = "against computer";
 
 let cellSize;
 const BOARDDIMENSION = 18; // visable grid displayed on the board
@@ -63,8 +64,13 @@ function draw() {
 //menu interface - switching between the states of menu and game
 function keyPressed() {
   if (key === "s") {
+    mode = "against computer";
     gameSetup();
     state = "play";
+  }
+  if (key === "t") {
+    mode = "against human";
+    gameSetup();
   }
 }
 
@@ -72,9 +78,15 @@ function gameSetup() {
   background(218, 184, 136);
   displayBoard();
   generatePlayBoard();
-  currentMove = "black";
-  turnState = "human";
-  state = "play";
+  if (mode === "against computer") {
+    currentMove = "black";
+    turnState = "human";
+    state = "play";
+  }
+  else if (mode === "against human") {
+    currentMove = "black";
+    state = "play";
+  }
 }
 
 function displayWin() {
@@ -151,10 +163,12 @@ function displayMenu() {
     textSize(width * 0.02);
     textAlign(CENTER, CENTER);
     text("GOMOKU", width/2, height/3);
-    text("press 's' to start a game", width/2, height/2);
+    text("press 's' to start a game against a computer", width/2, height/2);
+    text("press 't' to start a game against a human", width/2, height/2 * 1.1);
   }
 }
 
+//ui feature to display the color of the current player 
 function playerTurnBar() {
   if (state === "play" || state === "win") {
     fill(currentMove);
@@ -191,19 +205,18 @@ function generatePlayBoard() {
 
 //placing playing pieces
 function mousePressed() {
-  if (state === "play" && turnState === "human") {
+  if ((state === "play" && turnState === "human") ||(state === "play" && mode === "against human")) {
     // corX and corY adjusting for the centered grid
     let corX = floor(mouseX/cellSize - centerPlayX/cellSize); 
     let corY = floor(mouseY/cellSize - centerPlayY/cellSize);
     placeMarker(corX, corY);
     console.log(corX, corY);
   }
-  evaluateBoardState();
-
 }
 
 //saving information of current cell i.e. black, white, and null into the 2D-array
 function placeMarker(x, y) {
+  // if (mode === "against human") {
   if (board[y][x] === null) {
     if (currentMove === "white") {
       board[y][x] = "W";
@@ -217,7 +230,9 @@ function placeMarker(x, y) {
       circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
       currentMove = "white";
     }
-    turnState = "computer";
+    if (mode === "against computer") {
+      turnState = "computer";
+    }
     return board;
   }
 }
@@ -289,11 +304,17 @@ function evaluateBoardState() {
                     if (board[y][x + 4] === null) {
                       whitePoints += 900;
                     }
+                    if (x > 0 && board[y][x - 1] === null) {
+                      whitePoints += 900;
+                    }
                     whitePoints += 900;
                   }
                 }
                 else {
                   if (board[y][x + 3] === null) {
+                    whitePoints += 350; 
+                  }
+                  if (x > 0 && board[y][x - 1] === null) {
                     whitePoints += 350;
                   }
                   whitePoints += 350;
@@ -301,9 +322,12 @@ function evaluateBoardState() {
               }
               else {
                 if (board[y][x + 2] === null) {
-                  whitePoints += 25;
+                  whitePoints += 125;
                 }
-                whitePoints += 25;
+                if (x > 0 && board[y][x - 1] === null) {
+                  whitePoints += 125;
+                }
+                whitePoints += 125;
               }
             }
             else {
@@ -322,6 +346,9 @@ function evaluateBoardState() {
                     if (board[y + 4][x] === null) {
                       whitePoints += 900;
                     }
+                    if (y > 0 && board[y - 1][x] === null) {
+                      whitePoints += 900;
+                    }
                     whitePoints += 900;
                   }
                 }
@@ -329,14 +356,20 @@ function evaluateBoardState() {
                   if (board[y + 3][x] === null) {
                     whitePoints += 350;
                   }
+                  if (y > 0 && board[y - 1][x] === null) {
+                    whitePoints += 350;
+                  }
                   whitePoints += 350;
                 }
               }
               else {
                 if (board[y + 2][x] === null) {
-                  whitePoints += 25;
+                  whitePoints += 125;
                 }
-                whitePoints += 25;
+                if (y > 0 && board[y - 1][x] === null) {
+                  whitePoints += 125;
+                }
+                whitePoints += 125;
               }
             }
             else {
@@ -355,6 +388,9 @@ function evaluateBoardState() {
                     if (board[y + 4][x + 4] === null) {
                       whitePoints += 900;
                     }
+                    if (y > 0 && x > 0 && board[y - 1][x - 1] === null) {
+                      whitePoints += 900;
+                    }
                     whitePoints += 900;
                   }
                 }
@@ -362,14 +398,20 @@ function evaluateBoardState() {
                   if (board[y + 3][x + 3] === null) {
                     whitePoints += 350;
                   }
+                  if (y > 0 && x > 0 && board[y - 1][x - 1] === null) {
+                    whitePoints += 350;
+                  }
                   whitePoints += 350;
                 }
               }
               else {
                 if (board[y + 2][x + 2] === null) {
-                  whitePoints += 25;
+                  whitePoints += 125;
                 }
-                whitePoints += 25;
+                if (y > 0 && x > 0 && board[y - 1][x - 1] === null) {
+                  whitePoints += 125;
+                }
+                whitePoints += 125;
               }
             }
             else {
@@ -388,6 +430,9 @@ function evaluateBoardState() {
                     if (board[y - 4][x + 4] === null) {
                       whitePoints += 900;
                     }
+                    if (y < board.length && x > 0 && board[y + 1][x - 1] === null) {
+                      whitePoints += 900;
+                    }
                     whitePoints += 900;
                   }
                 }
@@ -395,14 +440,20 @@ function evaluateBoardState() {
                   if (board[y - 3][x + 3] === null) {
                     whitePoints += 350;
                   }
+                  if (y < board.length && x > 0 && board[y + 1][x - 1] === null) {
+                    whitePoints += 350;
+                  }
                   whitePoints += 350;
                 }
               }
               else {
                 if (board[y - 2][x + 2] === null) {
-                  whitePoints += 25;
+                  whitePoints += 125;
                 }
-                whitePoints += 25;
+                if (y < board.length && x > 0 && board[y + 1][x - 1] === null) {
+                  whitePoints += 125;
+                }
+                whitePoints += 125;
               }
             }
             else {
@@ -449,23 +500,32 @@ function evaluateBoardState() {
                   }
                   else{
                     if (board[y][x + 4] === null) {
-                      whitePoints -= 900;
+                      blackPoints -= 900;
+                    }
+                    if (x > 0 && board[y][x - 1] === null) {
+                      blackPoints -= 900;
                     }
                     blackPoints -= 900;
                   }
                 }
                 else {
                   if (board[y][x + 3] === null) {
-                    whitePoints -= 350;
+                    blackPoints -= 350;
+                  }
+                  if (x > 0 && board[y][x - 1] === null) {
+                    blackPoints -= 350;
                   }
                   blackPoints -= 350;
                 }
               }
               else {
                 if (board[y][x + 2] === null) {
-                  whitePoints -= 25;
+                  blackPoints -= 125;
                 }
-                blackPoints -= 25;
+                if (x > 0 && board[y][x - 1] === null) {
+                  blackPoints -= 125;
+                }
+                blackPoints -= 125;
               }
             }
             else {
@@ -482,23 +542,32 @@ function evaluateBoardState() {
                   }
                   else{
                     if (board[y + 4][x] === null) {
-                      whitePoints -= 900;
+                      blackPoints -= 900;
+                    }
+                    if (y > 0 && board[y - 1][x] === null) {
+                      blackPoints -= 900;
                     }
                     blackPoints -= 900;
                   }
                 }
                 else {
                   if (board[y + 3][x] === null) {
-                    whitePoints -= 350;
+                    blackPoints -= 350;
+                  }
+                  if (y > 0 && board[y - 1][x] === null) {
+                    blackPoints -= 350;
                   }
                   blackPoints -= 350;
                 }
               }
               else {
                 if (board[y + 2][x] === null) {
-                  whitePoints -= 25;
+                  blackPoints -= 125;
                 }
-                blackPoints -= 25;
+                if (y > 0 && board[y - 1][x] === null) {
+                  blackPoints -= 125;
+                }
+                blackPoints -= 125;
               }
             }
             else {
@@ -515,23 +584,32 @@ function evaluateBoardState() {
                   }
                   else{
                     if (board[y + 4][x + 4] === null) {
-                      whitePoints -= 900;
+                      blackPoints -= 900;
+                    }
+                    if (y > 0 && x > 0 && board[y - 1][x - 1] === null) {
+                      blackPoints -= 900;
                     }
                     blackPoints -= 900;
                   }
                 }
                 else {
                   if (board[y + 3][x + 3] === null) {
-                    whitePoints -= 350;
+                    blackPoints -= 350;
+                  }
+                  if (y > 0 && x > 0 && board[y - 1][x - 1] === null) {
+                    blackPoints -= 350;
                   }
                   blackPoints -= 350;
                 }
               }
               else {
                 if (board[y + 2][x + 2] === null) {
-                  whitePoints -= 25;
+                  blackPoints -= 125;
                 }
-                blackPoints -= 25;
+                if (y > 0 && x > 0 && board[y - 1][x - 1] === null) {
+                  blackPoints -= 125;
+                }
+                blackPoints -= 125;
               }
             }
             else {
@@ -548,23 +626,32 @@ function evaluateBoardState() {
                   }
                   else{
                     if (board[y - 4][x + 4] === null) {
-                      whitePoints -= 900;
+                      blackPoints -= 900;
+                    }
+                    if (y < board.length && x > 0 && board[y + 1][x - 1] === null) {
+                      blackPoints -= 900;
                     }
                     blackPoints -= 900;
                   }
                 }
                 else {
                   if (board[y - 3][x + 3] === null) {
-                    whitePoints -= 350;
+                    blackPoints -= 350;
+                  }
+                  if (y < board.length && x > 0 && board[y + 1][x - 1] === null) {
+                    blackPoints -= 350;
                   }
                   blackPoints -= 350;
                 }
               }
               else {
                 if (board[y - 2][x + 2] === null) {
-                  whitePoints -= 25;
+                  blackPoints -= 125;
                 }
-                blackPoints -= 25;
+                if (y < board.length && x > 0 && board[y + 1][x - 1] === null) {
+                  blackPoints -= 125;
+                }
+                blackPoints -= 125;
               }
             }
             else {
@@ -596,16 +683,14 @@ function evaluateBoardState() {
         }
       }
     }
-    
   }
-  // if (currentMove === "black") {
-  //   blackPoints = blackPoints * 0.2;
-  //   whitePoints = whitePoints * 1.2;
-  // }
-  // else if(currentMove === "white") {
-  //   whitePoints = whitePoints * 0.2;
-  //   blackPoints = blackPoints * 1.2;
-  // }
+
+  if (currentMove === "black") {
+    blackPoints = blackPoints * 0.3;
+  }
+  else if(currentMove === "white") {
+    whitePoints = whitePoints * 0.3;
+  }
   score = whitePoints + blackPoints;
   return score;
 }
