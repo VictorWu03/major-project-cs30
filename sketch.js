@@ -61,31 +61,18 @@ function draw() {
   computerMove();
 }
 
-//menu interface - switching between the states of menu and game
-function keyPressed() {
-  if (key === "s") {
-    mode = "against computer";
-    gameSetup();
-    state = "play";
-  }
-  if (key === "t") {
-    mode = "against human";
-    gameSetup();
-  }
-}
-
+//setting up game - drawing board, generating 2D array - sets mode
 function gameSetup() {
+  state = "play";
   background(218, 184, 136);
   displayBoard();
   generatePlayBoard();
   if (mode === "against computer") {
     currentMove = "black";
     turnState = "human";
-    state = "play";
   }
   else if (mode === "against human") {
     currentMove = "black";
-    state = "play";
   }
 }
 
@@ -134,6 +121,7 @@ function restart() {
   }
 }
 
+//return to menu button
 function returnToMenu() {
   if (state === "win" || state === "play") {
     fill("black");
@@ -156,15 +144,49 @@ function returnToMenu() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //game elements
+//main menu display - buttons to declare mode: play aginast human or play against computer
 function displayMenu() {
   if (state === "menu") {
     background(0);
     fill("white");
-    textSize(width * 0.02);
+    textSize(width * 0.04);
     textAlign(CENTER, CENTER);
     text("GOMOKU", width/2, height/3);
-    text("press 's' to start a game against a computer", width/2, height/2);
-    text("press 't' to start a game against a human", width/2, height/2 * 1.1);
+    //play against computer button
+    textSize(width * 0.02);
+    fill(255, 255, 255, 150);
+    rect(width/2 - width * 0.3, height/2, width * 0.3, height * 0.2);
+    fill("black");
+    text("Computer", width/2 -  width * 0.15, height/2 * 1.2);
+
+    fill(255, 255, 255, 150);
+    rect(width/2, height/2, width * 0.3, height * 0.2);
+    fill("black");
+    text("Human", width/2 * 1.3, height/2 * 1.2);
+
+    if (mouseX > width/2 - width * 0.3 && mouseX < width/2 - width * 0.3 +  width * 0.3 && mouseY > height/2 && mouseY < height/2 + height * 0.2) {
+      fill(255, 255, 255, 250);
+      rect(width/2 - width * 0.3, height/2, width * 0.3, height * 0.2);
+      fill("black");
+      text("Computer", width/2 -  width * 0.15, height/2 * 1.2);
+      if(mouseIsPressed) {
+        mode = "against computer";
+        state = "play";
+        gameSetup();
+      }
+    }
+
+    if (mouseX > width/2 && mouseX < width/2 + width * 0.3 && mouseY > height/2 && mouseY < height/2 + height * 0.2) {
+      fill(255, 255, 255, 250);
+      rect(width/2, height/2, width * 0.3, height * 0.2);
+      fill("black");
+      text("Human", width/2 * 1.3, height/2 * 1.2);
+      if(mouseIsPressed) {
+        mode = "against human";
+        state = "play";
+        gameSetup();
+      }
+    }
   }
 }
 
@@ -686,10 +708,10 @@ function evaluateBoardState() {
   }
 
   if (currentMove === "black") {
-    blackPoints = blackPoints * 0.3;
+    blackPoints = blackPoints * 0.27;
   }
   else if(currentMove === "white") {
-    whitePoints = whitePoints * 0.3;
+    whitePoints = whitePoints * 0.27;
   }
   score = whitePoints + blackPoints;
   return score;
