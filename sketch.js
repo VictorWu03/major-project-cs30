@@ -141,6 +141,35 @@ function returnToMenu() {
   }
 }
 
+// function helpButton() {
+//   if (state === "menu") {
+//     fill("white");
+//     rect(width * 0.8, height * 0.7, width*0.15, height * 0.1);
+//     fill("black");
+//     textSize(width * 0.02);
+//     text("Help", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
+//     if (mouseX > width * 0.8 && mouseX < width * 0.8 + width*0.15 && mouseY >  height * 0.7 && mouseY <  height * 0.7 + height * 0.1) {
+//       fill("black");
+//       rect(width * 0.8, height * 0.7, width*0.15, height * 0.1);
+//       fill("white");
+//       text("help", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
+//       if(mouseIsPressed) {
+//         state = "help";
+//       }
+//     }
+//   }
+// }
+
+// function displayHelp() {
+//   if (state === "help") {
+//     background("white");
+//     textAlign(CENTER, CENTER);
+//     textSize(width * 0.02);
+//     text("Objective: Connect 5 in a row to win", width/2, height/2);
+//     text("You can choose to either play against the computer or another player", width/2, height/2 * 1.1);
+//     text("press 'space' to return to the menu", width/2, height/2*1.2);
+//   }
+// }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //game elements
@@ -708,10 +737,10 @@ function evaluateBoardState() {
   }
 
   if (currentMove === "black") {
-    blackPoints = blackPoints * 0.27;
+    blackPoints = blackPoints * 0.28;
   }
   else if(currentMove === "white") {
-    whitePoints = whitePoints * 0.27;
+    whitePoints = whitePoints * 0.28;
   }
   score = whitePoints + blackPoints;
   return score;
@@ -759,6 +788,7 @@ function bestMove() {
     console.log(highScore);
   }
 }
+
 
 function computerMove() {
   if (state === "play" && turnState === "computer") {
