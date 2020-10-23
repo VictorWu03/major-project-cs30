@@ -27,11 +27,10 @@ let blackPoints = 0;
 let score;
 let bestXYMap = new Map();
 
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  // background(218, 184, 136); //Wooden board color
 
+  //setting cellsize based on window dimensions
   if (windowWidth <= windowHeight) {
     cellSize = windowWidth / 20;
   }
@@ -61,7 +60,7 @@ function draw() {
   computerMove();
 }
 
-//setting up game - drawing board, generating 2D array - sets mode
+//setting up game - drawing board, generating 2D array - sets mode (computer or human)
 function gameSetup() {
   state = "play";
   background(218, 184, 136);
@@ -81,7 +80,6 @@ function displayWin() {
     if (winner === "W"){
       //winner message - white
       fill(255, 255, 255, 10);
-      // rectMode(CENTER);
       rect(width/2 - width * 0.3, height/2 - height * 0.25/2, width * 0.6, height * 0.25);
       fill("black");
       textSize(width * 0.05);
@@ -91,7 +89,6 @@ function displayWin() {
     else if (winner === "B") {
       //winner message - black
       fill(0, 0, 0, 10);
-      // rectMode(CENTER);
       rect(width/2 - width * 0.3, height/2 - height * 0.25/2, width * 0.6, height * 0.25);
       fill("white");
       textSize(width * 0.05);
@@ -109,6 +106,7 @@ function restart() {
     fill("white");
     textSize(width * 0.02);
     text("Restart", width * 0.8 + width*0.15/2, height * 0.8 + height * 0.1/2);
+    //detecting mouse hover and click
     if (mouseX > width * 0.8 && mouseX < width * 0.8 + width*0.15 && mouseY >  height * 0.8 && mouseY <  height * 0.8 + height * 0.1) {
       fill("white");
       rect(width * 0.8, height * 0.8, width*0.15, height * 0.1);
@@ -129,6 +127,7 @@ function returnToMenu() {
     fill("white");
     textSize(width * 0.02);
     text("Home", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
+    //detecting mousehover and click
     if (mouseX > width * 0.8 && mouseX < width * 0.8 + width*0.15 && mouseY >  height * 0.7 && mouseY <  height * 0.7 + height * 0.1) {
       fill("white");
       rect(width * 0.8, height * 0.7, width*0.15, height * 0.1);
@@ -160,12 +159,13 @@ function displayMenu() {
     rect(width/2 - width * 0.3, height/2, width * 0.3, height * 0.2);
     fill("black");
     text("Computer", width/2 -  width * 0.15, height/2 * 1.2);
-
+    //play against the human button
     fill(255, 255, 255, 150);
     rect(width/2, height/2, width * 0.3, height * 0.2);
     fill("black");
     text("Human", width/2 * 1.3, height/2 * 1.2);
 
+    //detecting mouse hover and click for playing against the computer button
     if (mouseX > width/2 - width * 0.3 && mouseX < width/2 - width * 0.3 +  width * 0.3 && mouseY > height/2 && mouseY < height/2 + height * 0.2) {
       fill(255, 255, 255, 250);
       rect(width/2 - width * 0.3, height/2, width * 0.3, height * 0.2);
@@ -178,6 +178,7 @@ function displayMenu() {
       }
     }
 
+    //detecting mouse hover and click for playing against the human button
     if (mouseX > width/2 && mouseX < width/2 + width * 0.3 && mouseY > height/2 && mouseY < height/2 + height * 0.2) {
       fill(255, 255, 255, 250);
       rect(width/2, height/2, width * 0.3, height * 0.2);
@@ -227,7 +228,7 @@ function generatePlayBoard() {
   return board;
 }
 
-//placing playing pieces
+//placing playing pieces based on mouse coordinates when pressed
 function mousePressed() {
   if ((state === "play" && turnState === "human") ||(state === "play" && mode === "against human")) {
     // corX and corY adjusting for the centered grid
@@ -240,7 +241,6 @@ function mousePressed() {
 
 //saving information of current cell i.e. black, white, and null into the 2D-array
 function placeMarker(x, y) {
-  // if (mode === "against human") {
   if (board[y][x] === null) {
     if (currentMove === "white") {
       board[y][x] = "W";
@@ -261,10 +261,9 @@ function placeMarker(x, y) {
   }
 }
 
-//Checking for 5 in a row;
+//Checking for 5 in a row by iterating through the board (horozontal, vertical, diagonal)
 function checkWin() {
   if (state === "play") {
-    //horozontal
     for(let x = 0; x < board.length; x ++) {
       for (let y = 0; y < board.length; y ++) {
         if (board[y][x] !== null) {
@@ -306,17 +305,17 @@ function checkWin() {
   }
 }
 
+//giving point totals based on the board state
 function evaluateBoardState() {
   //points for consecutive pieces
   blackPoints = 0;
   whitePoints = 0;
 
   if (state === "play") {
-    //horozontal
     for(let x = 0; x < board.length; x ++) {
       for (let y = 0; y < board.length; y ++) {
         if (board[y][x] === "W") {
-          //horozontal
+          //horozontal point evaluation
           if (x < board.length - 4) { //checking boundaries 
             if (board[y][x] === board[y][x + 1]) {
               if (board[y][x] === board[y][x + 2]) {
@@ -325,6 +324,7 @@ function evaluateBoardState() {
                     whitePoints += 15626;
                   }
                   else{
+                    //additional points are awarded for open ends i.e. 4 in a row will be awarded more points if one or both of the ends are open
                     if (board[y][x + 4] === null) {
                       whitePoints += 900;
                     }
@@ -335,6 +335,7 @@ function evaluateBoardState() {
                   }
                 }
                 else {
+                  //checking for open ends
                   if (board[y][x + 3] === null) {
                     whitePoints += 350; 
                   }
@@ -348,7 +349,7 @@ function evaluateBoardState() {
                 //checking for open ends
                 if (board[y][x + 2] === null) {
                   whitePoints += 125;
-                  //checking for groupings of 2-2
+                  //checking for groupings of 2-2 with the middle position being null
                   if (board[y][x] === board[y][x + 3] && board[y][x] === board[y][x + 4]) {
                     whitePoints += 225;
                   }
@@ -375,6 +376,7 @@ function evaluateBoardState() {
                     whitePoints += 15626;
                   }
                   else{
+                    //checking for open ends
                     if (board[y + 4][x] === null) {
                       whitePoints += 900;
                     }
@@ -385,6 +387,7 @@ function evaluateBoardState() {
                   }
                 }
                 else {
+                  //checking for open ends
                   if (board[y + 3][x] === null) {
                     whitePoints += 350;
                   }
@@ -395,6 +398,7 @@ function evaluateBoardState() {
                 }
               }
               else {
+                //checking for open ends and accounting for groupings of 2-2 with the middle position being null
                 if (board[y + 2][x] === null) {
                   whitePoints += 125;
                   if (board[y][x] === board[y + 3][x] && board[y][x] === board[y + 4][x]) {
@@ -423,6 +427,7 @@ function evaluateBoardState() {
                     whitePoints += 15626;
                   }
                   else{
+                    //checking for open ends
                     if (board[y + 4][x + 4] === null) {
                       whitePoints += 900;
                     }
@@ -433,6 +438,7 @@ function evaluateBoardState() {
                   }
                 }
                 else {
+                  //checking for open ends
                   if (board[y + 3][x + 3] === null) {
                     whitePoints += 350;
                   }
@@ -443,6 +449,7 @@ function evaluateBoardState() {
                 }
               }
               else {
+                //checking for open ends and accounting for groupings of 2-2 with the middle position being null
                 if (board[y + 2][x + 2] === null) {
                   whitePoints += 125;
                   if (board[y][x] === board[y + 3][x + 3] && board[y][x] === board[y + 4][x + 4]) {
@@ -471,6 +478,7 @@ function evaluateBoardState() {
                     whitePoints += 15626;
                   }
                   else{
+                    //checking for open ends
                     if (board[y - 4][x + 4] === null) {
                       whitePoints += 900;
                     }
@@ -481,6 +489,7 @@ function evaluateBoardState() {
                   }
                 }
                 else {
+                  //checking for open ends
                   if (board[y - 3][x + 3] === null) {
                     whitePoints += 350;
                   }
@@ -491,6 +500,7 @@ function evaluateBoardState() {
                 }
               }
               else {
+                //checking for open ends and accounting for groupings of 2-2 with the middle position being null
                 if (board[y - 2][x + 2] === null) {
                   whitePoints += 125;
                   if (board[y][x] === board[y - 3][x + 3] && board[y][x] === board[y - 4][x + 4]) {
@@ -549,6 +559,7 @@ function evaluateBoardState() {
                     blackPoints -= 15626;
                   }
                   else{
+                    //checking for open ends
                     if (board[y][x + 4] === null) {
                       blackPoints -= 900;
                     }
@@ -559,6 +570,7 @@ function evaluateBoardState() {
                   }
                 }
                 else {
+                  //checking for open ends
                   if (board[y][x + 3] === null) {
                     blackPoints -= 350;
                   }
@@ -569,6 +581,7 @@ function evaluateBoardState() {
                 }
               }
               else {
+                //checking for open ends and accounting for groupings of 2-2 with the middle position being null
                 if (board[y][x + 2] === null) {
                   blackPoints -= 125;
                   if (board[y][x] === board[y][x + 3] && board[y][x] === board[y][x + 4]) {
@@ -597,6 +610,7 @@ function evaluateBoardState() {
                     blackPoints -= 15626;
                   }
                   else{
+                    //checking for open ends
                     if (board[y + 4][x] === null) {
                       blackPoints -= 900;
                     }
@@ -607,6 +621,7 @@ function evaluateBoardState() {
                   }
                 }
                 else {
+                  //checking for open ends
                   if (board[y + 3][x] === null) {
                     blackPoints -= 350;
                   }
@@ -617,6 +632,7 @@ function evaluateBoardState() {
                 }
               }
               else {
+                //checking for open ends and accounting for groupings of 2-2 with the middle position being null
                 if (board[y + 2][x] === null) {
                   blackPoints -= 125;
                   if (board[y][x] === board[y + 3][x] && board[y][x] === board[y + 4][x]) {
@@ -645,6 +661,7 @@ function evaluateBoardState() {
                     blackPoints -= 15626;
                   }
                   else{
+                    //checking for open ends
                     if (board[y + 4][x + 4] === null) {
                       blackPoints -= 900;
                     }
@@ -655,6 +672,7 @@ function evaluateBoardState() {
                   }
                 }
                 else {
+                  //checking for open ends
                   if (board[y + 3][x + 3] === null) {
                     blackPoints -= 350;
                   }
@@ -665,6 +683,7 @@ function evaluateBoardState() {
                 }
               }
               else {
+                //checking for open ends and accounting for groupings of 2-2 with the middle position being null
                 if (board[y + 2][x + 2] === null) {
                   blackPoints -= 125;
                   if (board[y][x] === board[y + 3][x + 3] && board[y][x] === board[y + 4][x + 4]) {
@@ -693,6 +712,7 @@ function evaluateBoardState() {
                     blackPoints -= 15626;
                   }
                   else{
+                    //checking for open ends
                     if (board[y - 4][x + 4] === null) {
                       blackPoints -= 900;
                     }
@@ -703,6 +723,7 @@ function evaluateBoardState() {
                   }
                 }
                 else {
+                  //checking for open ends
                   if (board[y - 3][x + 3] === null) {
                     blackPoints -= 350;
                   }
@@ -713,6 +734,7 @@ function evaluateBoardState() {
                 }
               }
               else {
+                //checking for open ends and accounting for groupings of 2-2 with the middle position being null
                 if (board[y - 2][x + 2] === null) {
                   blackPoints -= 125;
                   if (board[y][x] === board[y - 3][x + 3] && board[y][x] === board[y - 4][x + 4]) {
@@ -758,7 +780,7 @@ function evaluateBoardState() {
       }
     }
   }
-
+  //adjusting points so the computer will value stoping a win higher than pursuing their own win - allows the point values to be adjusted accordingly to play defense
   if (currentMove === "black") {
     blackPoints = blackPoints * 0.24;
   }
@@ -769,21 +791,22 @@ function evaluateBoardState() {
   return score;
 }
 
+//determining the highest scoring move and saving the coordinates in a map
 function bestMove() {
   if (currentMove === "black") {
-    let highScore = Infinity;
+    let highScore = Infinity; // ensures that a move will be made by the computer
   
     for(let x = 0; x < board.length; x ++) {
       for (let y = 0; y < board.length; y ++) {
         if(board[y][x] === null) {
           board[y][x] = "B";
-          evaluateBoardState();
-          if (score < highScore) {
+          evaluateBoardState(); //evaluating the board state after each open move is attempted
+          if (score < highScore) { //saving coordinates of the highest scoring moves in a map
             bestXYMap.set("x", x);
             bestXYMap.set("y", y);
             highScore = score;
           }
-          board[y][x] = null;
+          board[y][x] = null; //ensuring the playing board state remains the same by erasing the trials
         }
       }
     }
@@ -791,19 +814,19 @@ function bestMove() {
     console.log(highScore);
   }
   else if (currentMove === "white") {
-    let highScore = -Infinity;
+    let highScore = -Infinity; // ensures that a move will be made by the computer
   
     for(let x = 0; x < board.length; x ++) {
       for (let y = 0; y < board.length; y ++) {
         if(board[y][x] === null) {
           board[y][x] = "W";
-          evaluateBoardState();
-          if (score > highScore) {
+          evaluateBoardState(); //evaluating the board state after each open move is attempted
+          if (score > highScore) { //saving coordinates of the highest scoring moves in a map
             bestXYMap.set("x", x);
             bestXYMap.set("y", y);
             highScore = score;
           }
-          board[y][x] = null;
+          board[y][x] = null; //ensuring the playing board state remains the same by erasing the trials
         }
       }
     }
@@ -812,7 +835,7 @@ function bestMove() {
   }
 }
 
-
+//computer will make a move by taking the highest scoring set of coordinates 
 function computerMove() {
   if (state === "play" && turnState === "computer") {
 
@@ -820,8 +843,8 @@ function computerMove() {
     let bestX = bestXYMap.get("x");
     let bestY = bestXYMap.get("y");
 
+    //making a move based on the best coordinates
     if (currentMove === "black") {
-
       board[bestY][bestX] = "B";
       fill(currentMove);
       circle(cellSize * bestX + centerPlayX + cellSize/2, cellSize * bestY + centerPlayY + cellSize/2, cellSize * 0.85);
@@ -831,7 +854,6 @@ function computerMove() {
 
     }
     else if (currentMove === "white") {
-
       board[bestY][bestX] = "W";
       fill(currentMove);
       circle(cellSize * bestX + centerPlayX + cellSize/2, cellSize * bestY + centerPlayY + cellSize/2, cellSize * 0.85);
