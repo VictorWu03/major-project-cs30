@@ -141,35 +141,6 @@ function returnToMenu() {
   }
 }
 
-// function helpButton() {
-//   if (state === "menu") {
-//     fill("white");
-//     rect(width * 0.8, height * 0.7, width*0.15, height * 0.1);
-//     fill("black");
-//     textSize(width * 0.02);
-//     text("Help", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
-//     if (mouseX > width * 0.8 && mouseX < width * 0.8 + width*0.15 && mouseY >  height * 0.7 && mouseY <  height * 0.7 + height * 0.1) {
-//       fill("black");
-//       rect(width * 0.8, height * 0.7, width*0.15, height * 0.1);
-//       fill("white");
-//       text("help", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
-//       if(mouseIsPressed) {
-//         state = "help";
-//       }
-//     }
-//   }
-// }
-
-// function displayHelp() {
-//   if (state === "help") {
-//     background("white");
-//     textAlign(CENTER, CENTER);
-//     textSize(width * 0.02);
-//     text("Objective: Connect 5 in a row to win", width/2, height/2);
-//     text("You can choose to either play against the computer or another player", width/2, height/2 * 1.1);
-//     text("press 'space' to return to the menu", width/2, height/2*1.2);
-//   }
-// }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //game elements
@@ -178,8 +149,10 @@ function displayMenu() {
   if (state === "menu") {
     background(0);
     fill("white");
-    textSize(width * 0.04);
     textAlign(CENTER, CENTER);
+    textSize(width * 0.02);
+    text("Goal: Connect 5", width/2, height /3 + height * 0.1);
+    textSize(width * 0.04);
     text("GOMOKU", width/2, height/3);
     //play against computer button
     textSize(width * 0.02);
@@ -372,11 +345,19 @@ function evaluateBoardState() {
                 }
               }
               else {
+                //checking for open ends
                 if (board[y][x + 2] === null) {
                   whitePoints += 125;
+                  //checking for groupings of 2-2
+                  if (board[y][x] === board[y][x + 3] && board[y][x] === board[y][x + 4]) {
+                    whitePoints += 225;
+                  }
                 }
                 if (x > 0 && board[y][x - 1] === null) {
                   whitePoints += 125;
+                  if (x > 3 && board[y][x] === board[y][x - 3] && board[y][x] === board[y][x - 4]) {
+                    whitePoints += 225;
+                  }
                 }
                 whitePoints += 125;
               }
@@ -416,9 +397,15 @@ function evaluateBoardState() {
               else {
                 if (board[y + 2][x] === null) {
                   whitePoints += 125;
+                  if (board[y][x] === board[y + 3][x] && board[y][x] === board[y + 4][x]) {
+                    whitePoints += 225;
+                  }
                 }
                 if (y > 0 && board[y - 1][x] === null) {
                   whitePoints += 125;
+                  if (y > 3 && board[y][x] === board[y - 3][x] && board[y][x] === board[y - 4][x]) {
+                    whitePoints += 225;
+                  }
                 }
                 whitePoints += 125;
               }
@@ -458,9 +445,15 @@ function evaluateBoardState() {
               else {
                 if (board[y + 2][x + 2] === null) {
                   whitePoints += 125;
+                  if (board[y][x] === board[y + 3][x + 3] && board[y][x] === board[y + 4][x + 4]) {
+                    whitePoints += 225;
+                  }
                 }
                 if (y > 0 && x > 0 && board[y - 1][x - 1] === null) {
                   whitePoints += 125;
+                  if (y > 3 && x > 3 && board[y][x] === board[y - 3][x - 3] && board[y][x] === board[y - 4][x - 4]) {
+                    whitePoints += 225;
+                  }
                 }
                 whitePoints += 125;
               }
@@ -500,9 +493,15 @@ function evaluateBoardState() {
               else {
                 if (board[y - 2][x + 2] === null) {
                   whitePoints += 125;
+                  if (board[y][x] === board[y - 3][x + 3] && board[y][x] === board[y - 4][x + 4]) {
+                    whitePoints += 225;
+                  }
                 }
                 if (y < board.length && x > 0 && board[y + 1][x - 1] === null) {
                   whitePoints += 125;
+                  if (y > board.length - 4 && x > 3 && board[y][x] === board[y + 3][x - 3] && board[y][x] === board[y + 4][x - 4]) {
+                    whitePoints += 225;
+                  }
                 }
                 whitePoints += 125;
               }
@@ -572,9 +571,15 @@ function evaluateBoardState() {
               else {
                 if (board[y][x + 2] === null) {
                   blackPoints -= 125;
+                  if (board[y][x] === board[y][x + 3] && board[y][x] === board[y][x + 4]) {
+                    blackPoints -= 225;
+                  }
                 }
                 if (x > 0 && board[y][x - 1] === null) {
                   blackPoints -= 125;
+                  if (x > 3 && board[y][x] === board[y][x - 3] && board[y][x] === board[y][x - 4]) {
+                    blackPoints -= 225;
+                  }
                 }
                 blackPoints -= 125;
               }
@@ -614,9 +619,15 @@ function evaluateBoardState() {
               else {
                 if (board[y + 2][x] === null) {
                   blackPoints -= 125;
+                  if (board[y][x] === board[y + 3][x] && board[y][x] === board[y + 4][x]) {
+                    blackPoints -= 225;
+                  }
                 }
                 if (y > 0 && board[y - 1][x] === null) {
                   blackPoints -= 125;
+                  if (y > 3 && board[y][x] === board[y - 3][x] && board[y][x] === board[y - 4][x]) {
+                    blackPoints -= 225;
+                  }
                 }
                 blackPoints -= 125;
               }
@@ -656,9 +667,15 @@ function evaluateBoardState() {
               else {
                 if (board[y + 2][x + 2] === null) {
                   blackPoints -= 125;
+                  if (board[y][x] === board[y + 3][x + 3] && board[y][x] === board[y + 4][x + 4]) {
+                    blackPoints -= 225;
+                  }
                 }
                 if (y > 0 && x > 0 && board[y - 1][x - 1] === null) {
                   blackPoints -= 125;
+                  if (y > 3 && x > 3 && board[y][x] === board[y - 3][x - 3] && board[y][x] === board[y - 4][x - 4]) {
+                    blackPoints -= 225;
+                  }
                 }
                 blackPoints -= 125;
               }
@@ -698,9 +715,15 @@ function evaluateBoardState() {
               else {
                 if (board[y - 2][x + 2] === null) {
                   blackPoints -= 125;
+                  if (board[y][x] === board[y - 3][x + 3] && board[y][x] === board[y - 4][x + 4]) {
+                    blackPoints -= 225;
+                  }
                 }
                 if (y < board.length && x > 0 && board[y + 1][x - 1] === null) {
                   blackPoints -= 125;
+                  if (y > board.length - 4 && x > 3 && board[y][x] === board[y + 3][x - 3] && board[y][x] === board[y + 4][x - 4]) {
+                    whitePoints -= 225;
+                  }
                 }
                 blackPoints -= 125;
               }
@@ -737,10 +760,10 @@ function evaluateBoardState() {
   }
 
   if (currentMove === "black") {
-    blackPoints = blackPoints * 0.27;
+    blackPoints = blackPoints * 0.24;
   }
   else if(currentMove === "white") {
-    whitePoints = whitePoints * 0.27;
+    whitePoints = whitePoints * 0.24;
   }
   score = whitePoints + blackPoints;
   return score;
