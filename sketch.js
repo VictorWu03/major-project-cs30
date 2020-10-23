@@ -737,10 +737,10 @@ function evaluateBoardState() {
   }
 
   if (currentMove === "black") {
-    blackPoints = blackPoints * 0.28;
+    blackPoints = blackPoints * 0.27;
   }
   else if(currentMove === "white") {
-    whitePoints = whitePoints * 0.28;
+    whitePoints = whitePoints * 0.27;
   }
   score = whitePoints + blackPoints;
   return score;
