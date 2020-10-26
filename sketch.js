@@ -19,7 +19,7 @@ let centerPlayY;
 
 let board = [];
 
-let currentMove = "white";
+let currentMove = "black";
 let winner;
 
 let whitePoints = 0;
@@ -67,11 +67,11 @@ function gameSetup() {
   displayBoard();
   generatePlayBoard();
   if (mode === "against computer") {
-    currentMove = "black";
+    currentMove = "white";
     turnState = "human";
   }
   else if (mode === "against human") {
-    currentMove = "black";
+    currentMove = "white";
   }
 }
 
