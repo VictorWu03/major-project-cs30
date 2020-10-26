@@ -2,7 +2,7 @@
 
 ## Description
 
-I am intending on creating an ai for tic tac toe and eventually applying that knowledge to gomoku which is a larger scale game
+I am intending on creating the game Gomoku. The goal of the game is to connect 5 in a row on an 18 by 18 grid. Similarly to tic tac toe, you can win by connecting 5 in a row horozontally, vertically, and diagonally. There will be options to play against another player or playing against the computer. 
 
 ## Need to have
 
@@ -13,6 +13,6 @@ I am intending on creating an ai for tic tac toe and eventually applying that kn
 
 ## Nice to have
 
-- Player vs. computer mode - using minimax/generating score based on board state (gomoku)
+- Player vs. computer mode - have the computer make moves by evaluating the board state. This will be done by giving a score to each board state.
 - Improving computer decisions using recursion and increasing the search depth to generate "smarter" moves
-- Imporved interface features
+- Improved interface features

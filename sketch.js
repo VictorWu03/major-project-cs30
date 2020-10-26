@@ -782,10 +782,10 @@ function evaluateBoardState() {
   }
   //adjusting points so the computer will value stoping a win higher than pursuing their own win - allows the point values to be adjusted accordingly to play defense
   if (currentMove === "black") {
-    blackPoints = blackPoints * 0.24;
+    blackPoints = blackPoints * 0.245;
   }
   else if(currentMove === "white") {
-    whitePoints = whitePoints * 0.24;
+    whitePoints = whitePoints * 0.245;
   }
   score = whitePoints + blackPoints;
   return score;
