@@ -72,6 +72,7 @@ function gameSetup() {
   }
   else if (mode === "against human") {
     currentMove = "white";
+    turnState = "human";
   }
 }
 
